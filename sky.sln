@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{900BC885-D755-3375-AEC4-70198A9514F3}") = "sky", "Assembly-CSharp.csproj", "{E0EF5DAA-2BC1-2B32-2285-18867FE4E1E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0EF5DAA-2BC1-2B32-2285-18867FE4E1E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0EF5DAA-2BC1-2B32-2285-18867FE4E1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0EF5DAA-2BC1-2B32-2285-18867FE4E1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0EF5DAA-2BC1-2B32-2285-18867FE4E1E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

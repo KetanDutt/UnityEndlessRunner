@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\playerMotor.cs">
+    <Files>
+      <File FileName="Assets\scripts\playerMotor.cs" Line="70" Column="3" />
+      <File FileName="Assets\scripts\cameraMotor.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\baseManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\Score.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\DeathMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\mainmenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\DeathPlane.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
