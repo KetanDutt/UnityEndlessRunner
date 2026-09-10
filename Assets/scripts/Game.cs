@@ -1,10 +1,16 @@
 using UnityEngine;
 
 /// <summary>
-/// Persistent settings and best-score storage. Values survive scene changes and
-/// are saved to PlayerPrefs so the best score persists between sessions.
-/// This singleton is created lazily so it also works when the scene does not
-/// reference it explicitly.
+/// Persistent, cross-scene game state and settings.
+///
+/// A single instance survives scene loads (DontDestroyOnLoad) and stores:
+///   * the best score (saved to PlayerPrefs),
+///   * audio / vibration preferences,
+///   * the current run's transient state (score, coins, pause, magnet timer...).
+///
+/// It is created lazily by <see cref="Instance"/> so it works even when a scene
+/// does not reference it explicitly (the binary-serialized scenes in this
+/// project carry no script references).
 /// </summary>
 public class Game : MonoBehaviour
 {
@@ -17,6 +23,11 @@ public class Game : MonoBehaviour
 
     private static Game instance;
 
+    private int bestScore;
+    private bool muted;
+    private bool vibrationEnabled;
+
+    /// <summary>Global (cross-scene) singleton.</summary>
     public static Game Instance
     {
         get
@@ -34,20 +45,37 @@ public class Game : MonoBehaviour
         }
     }
 
-    private int bestScore;
-    private bool muted;
-    private bool vibrationEnabled;
+    // ------------------------------------------------------------------
+    // Transient run state (reset by ResetRun).
+    // ------------------------------------------------------------------
 
-    public int BestScore
-    {
-        get { return bestScore; }
-        set
-        {
-            if (value <= bestScore) return;
-            bestScore = value;
-            PlayerPrefs.SetInt(BestScoreKey, bestScore);
-        }
-    }
+    /// <summary>Current forward speed in world units per second.</summary>
+    public static float Speed { get; set; }
+
+    /// <summary>True while the player is allowed to run (false during the countdown).</summary>
+    public static bool IsRunning { get; set; }
+
+    /// <summary>True once the run has ended.</summary>
+    public static bool GameOver { get; set; }
+
+    /// <summary>True while the game is paused.</summary>
+    public static bool IsPaused { get; private set; }
+
+    /// <summary>Score of the run that just ended (kept for the death screen).</summary>
+    public static int CurrentScore { get; set; }
+
+    /// <summary>Coins collected in the run that just ended.</summary>
+    public static int LastRunCoins { get; set; }
+
+    /// <summary>True if the last run set a new high score.</summary>
+    public static bool LastRunWasNewBest { get; set; }
+
+    /// <summary>Remaining magnet power-up time in seconds.</summary>
+    public static float MagnetTime { get; set; }
+
+    // ------------------------------------------------------------------
+    // Persistent settings.
+    // ------------------------------------------------------------------
 
     public bool Muted
     {
@@ -69,10 +97,23 @@ public class Game : MonoBehaviour
         }
     }
 
-    public static float Speed { get; set; }
-    public static bool IsRunning { get; set; }
-    public static bool GameOver { get; set; }
-    public static int CurrentScore { get; set; }
+    /// <summary>Best score. Setting a lower value is ignored.</summary>
+    public int BestScore
+    {
+        get { return bestScore; }
+        set
+        {
+            if (value <= bestScore) return;
+            bestScore = value;
+            PlayerPrefs.SetInt(BestScoreKey, bestScore);
+        }
+    }
+
+    /// <summary>Convenience getter for the best score.</summary>
+    public static int HighScore
+    {
+        get { return Instance.bestScore; }
+    }
 
     void Awake()
     {
@@ -91,15 +132,39 @@ public class Game : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
+    /// <summary>
+    /// Resets all per-run state. Safe to call at any time (scene load,
+    /// restart, etc.) — it also un-pauses and restores the time scale.
+    /// </summary>
     public static void ResetRun()
     {
         CurrentScore = 0;
+        LastRunCoins = 0;
+        LastRunWasNewBest = false;
         GameOver = false;
-        IsRunning = true;
+        IsPaused = false;
+        IsRunning = true;   // the game scene immediately overrides this with its countdown.
+        MagnetTime = 0f;
+        Time.timeScale = 1f;
     }
 
-    public static int HighScore
+    public static void Pause()
     {
-        get { return Instance.bestScore; }
+        if (GameOver || IsPaused) return;
+        IsPaused = true;
+        Time.timeScale = 0f;
+    }
+
+    public static void Resume()
+    {
+        if (!IsPaused) return;
+        IsPaused = false;
+        Time.timeScale = 1f;
+    }
+
+    public static void TogglePause()
+    {
+        if (IsPaused) Resume();
+        else Pause();
     }
 }

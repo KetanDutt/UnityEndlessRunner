@@ -23,6 +23,8 @@ public class PlayerSpawner : MonoBehaviour
         EnsureLight();
         EnsureEventSystem();
         EnsureManagers();
+        EnsureGameUI();
+        StartCountdown();
         ScenePolish.Apply();
     }
 
@@ -146,5 +148,24 @@ public class PlayerSpawner : MonoBehaviour
 
         if (FindObjectOfType<DeathMenu>() == null)
             gameObject.AddComponent<DeathMenu>();
+    }
+
+    void EnsureGameUI()
+    {
+        if (FindObjectOfType<GameUI>() == null)
+            gameObject.AddComponent<GameUI>();
+    }
+
+    /// <summary>Freezes the run and plays the 3-2-1 style countdown. The player
+    /// settles onto the track during it, then the run starts automatically.</summary>
+    void StartCountdown()
+    {
+        Game.IsRunning = false;
+
+        GameUI ui = FindObjectOfType<GameUI>();
+        if (ui != null)
+            ui.ShowCountdown(null);
+        else
+            Game.IsRunning = true;   // Safety net if the UI was somehow missing.
     }
 }
