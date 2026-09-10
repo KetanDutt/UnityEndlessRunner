@@ -69,6 +69,32 @@ public static class Easing
         return t * t * ((s + 1f) * t - s);
     }
 
+    public static float BackInOut(float t)
+    {
+        const float s = 1.70158f * 1.525f;
+        if (t < 0.5f)
+        {
+            t *= 2f;
+            return 0.5f * (t * t * ((s + 1f) * t - s));
+        }
+        t = t * 2f - 2f;
+        return 0.5f * (t * t * ((s + 1f) * t + s) + 2f);
+    }
+
+    public static float ExpoOut(float t)
+    {
+        return t >= 1f ? 1f : 1f - Mathf.Pow(2f, -10f * t);
+    }
+
+    public static float ElasticOut(float t)
+    {
+        if (t <= 0f) return 0f;
+        if (t >= 1f) return 1f;
+        float p = 0.3f;
+        float s = p / 4f;
+        return Mathf.Pow(2f, -10f * t) * Mathf.Sin((t - s) * (2f * Mathf.PI) / p) + 1f;
+    }
+
     public static float BounceOut(float t)
     {
         if (t < 1f / 2.75f) return 7.5625f * t * t;
